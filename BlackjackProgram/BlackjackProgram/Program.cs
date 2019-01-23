@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,23 +35,30 @@ namespace BlackjackProgram
                 {
                     Console.Write("想定外の文字列が入力されました。");
                 }
-            } while (player.judge == true);
+            } while (!(player.judge));
 
-            Game game = new Game();
-            int win = game.compare(game.win);
+            if (player.judge)
+            {
+                Game game = new Game();
+                int win = game.compare(game.win);
 
-            if (win == 0)
+                if (win == 0)
+                {
+                    Console.Write("CPUの勝ち");
+                }
+                else if (win == 1)
+                {
+                    Console.Write("あなたの勝ち");
+                }
+                else if (win == 2)
+                {
+                    Console.Write("引き分け");
+
+                }
+            }else if(!(player.judge))
             {
-                Console.Write("CPUの勝ち");
+                Console.Write("バーストしました。");
             }
-            else if (win == 1)
-            {
-                Console.Write("あなたの勝ち");
-            }
-            else if (win == 2)
-            {
-                Console.Write("引き分け");
-            }  
 
             Console.ReadKey();
         }
@@ -66,12 +73,13 @@ namespace BlackjackProgram
         public string []numbers = new string [13] {"1","2","3","4","5","6","7","8","9","10","11","12","13" };
 
         public List<string> drawn_mark = new List<string>();
+        public List<string> drawn_number = new List<string>();
 
         public string mark { set; get; }
 
         public string number { set; get; }
 
-        public void draw(int number)
+        public void draw()
         {
 
             do
@@ -82,13 +90,13 @@ namespace BlackjackProgram
                 Random r2 = new System.Random();
                 int random_number = r2.Next(12);
 
-                DrawCard dc = new DrawCard();
-                mark = dc.marks[random_mark];
-                number = dc.numbers[random_number];
+
+                mark = marks[random_mark];
+                number = numbers[random_number];
 
                 drawn_mark.Add(mark);
-
-            } while (!(drawn_mark.Contains(mark)));
+                drawn_number.Add(number);
+            } while (drawn_mark.Contains(mark) && drawn_number.Contains(number));
         }
     }
     /**
@@ -103,7 +111,7 @@ namespace BlackjackProgram
 
         public int point { set; get; }
 
-        public bool judge = true;
+        public bool judge = false;
 
         public void draw()
         {
@@ -111,15 +119,14 @@ namespace BlackjackProgram
             DrawCard dc = new DrawCard();
             dc.draw();
 
-            CPU cpu = new CPU();
-            cpu.point += int.Parse(dc.number);
+            //CPU cpu = new CPU();
+            point += int.Parse(dc.number);
 
             Console.WriteLine("CPUが引いたのは{0}の{1}", dc.mark, dc.number);
 
-            if (cpu.point > 21)
+            if (point > 21)
             {
-                cpu.judge = false;
-                Console.WriteLine("バーストしました");
+                judge = true;
             }
         }
     }
@@ -135,7 +142,7 @@ namespace BlackjackProgram
 
         public int point { set; get; }
 
-        public bool judge = true;
+        public bool judge = false;
 
         public void draw()
         {
@@ -143,15 +150,14 @@ namespace BlackjackProgram
             DrawCard dc = new DrawCard();
             dc.draw();
 
-            Player player = new Player();
-            player.point += int.Parse(dc.number);
+            //Player player = new Player();
+            point += int.Parse(dc.number);
             
             Console.WriteLine("あなたが引いたのは{0}の{1}", dc.mark, dc.number);
 
-            if (player.point > 21)
+            if (point > 21)
             {
-                player.judge = false;
-                Console.WriteLine("バーストしました");
+                judge = true;
             }
         }
     }
