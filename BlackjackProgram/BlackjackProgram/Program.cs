@@ -50,6 +50,18 @@ namespace BlackjackProgram
                 }
             } while (!(player.judge));
 
+            do
+            {
+                cpu.draw();
+
+                if (cpu.point > 21)
+                {
+                    Console.WriteLine("バーストしました。");
+                }
+
+            } while (cpu.point <= 17);
+
+
             if (player.point > 21)
             {
                 Console.WriteLine("バーストしました。");
