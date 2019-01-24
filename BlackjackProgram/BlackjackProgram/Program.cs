@@ -7,14 +7,18 @@ using System.Threading.Tasks;
 namespace BlackjackProgram
 {
     public class Program
-    {
+    { 
         static void Main(string[] args)
         {
             Console.WriteLine("ゲームを開始します。");
             Console.ReadKey();
 
             CPU cpu = new CPU();
-            cpu.draw();
+            do
+            {
+                cpu.draw();
+
+            } while (cpu.point <= 17);
 
             Player player = new Player();
             do
@@ -40,7 +44,7 @@ namespace BlackjackProgram
             if (player.judge)
             {
                 Game game = new Game();
-                int win = game.compare(game.win);
+                int win = game.compare();
 
                 if (win == 0)
                 {
@@ -55,7 +59,8 @@ namespace BlackjackProgram
                     Console.Write("引き分け");
 
                 }
-            }else if(!(player.judge))
+            }
+            else if (player.point > 21)
             {
                 Console.Write("バーストしました。");
             }
@@ -70,7 +75,7 @@ namespace BlackjackProgram
     public class DrawCard
     {
         public string[] marks = new string[4] { "スペード", "クラブ", "ダイヤ", "ハート" };
-        public string []numbers = new string [13] {"1","2","3","4","5","6","7","8","9","10","11","12","13" };
+        public string[] numbers = new string[13] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" };
 
         public List<string> drawn_mark = new List<string>();
         public List<string> drawn_number = new List<string>();
@@ -90,19 +95,20 @@ namespace BlackjackProgram
                 Random r2 = new System.Random();
                 int random_number = r2.Next(12);
 
-
+               
                 mark = marks[random_mark];
                 number = numbers[random_number];
 
-                drawn_mark.Add(mark);
-                drawn_number.Add(number);
             } while (drawn_mark.Contains(mark) && drawn_number.Contains(number));
+
+            drawn_mark.Add(mark);
+            drawn_number.Add(number);
         }
     }
     /**
      * CPUの処理をします
      * 
-     */ 
+     */
     public class CPU
     {
         public string mark { set; get; }
@@ -152,7 +158,7 @@ namespace BlackjackProgram
 
             //Player player = new Player();
             point += int.Parse(dc.number);
-            
+
             Console.WriteLine("あなたが引いたのは{0}の{1}", dc.mark, dc.number);
 
             if (point > 21)
@@ -169,18 +175,18 @@ namespace BlackjackProgram
     {
         public int win { set; get; }
 
-        public int compare(int win)
+        public int compare()
         {
             CPU cpu = new CPU();
-            
+
             Player player = new Player();
 
-            
+
             if (cpu.point < player.point)
             {
                 return 1;//playerが勝ったら1を返す
             }
-            else if(cpu.point > player.point)
+            else if (cpu.point > player.point)
             {
                 return 0;//cpuが勝ったら0を返す
             }
@@ -188,7 +194,7 @@ namespace BlackjackProgram
             {
                 return 2;//引き分けならば2を返す
             }
-            
+
 
         }
     }
