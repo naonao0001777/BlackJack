@@ -41,7 +41,7 @@ namespace BlackjackProgram
                 }
             } while (!(player.judge));
 
-            if (player.judge)
+            if (player.point <= 21)
             {
                 Game game = new Game();
                 int win = game.compare();
