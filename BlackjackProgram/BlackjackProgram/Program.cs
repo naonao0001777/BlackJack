@@ -14,11 +14,20 @@ namespace BlackjackProgram
             Console.ReadKey();
 
             CPU cpu = new CPU();
-            do
+
+            cpu.draw();
+            /*
+             * do
             {
                 cpu.draw();
 
+                if (cpu.point > 21)
+                {
+                    Console.WriteLine("バーストしました。");
+                }
+
             } while (cpu.point <= 17);
+            */
 
             Player player = new Player();
             do
@@ -37,32 +46,54 @@ namespace BlackjackProgram
                 }
                 else
                 {
-                    Console.Write("想定外の文字列が入力されました。");
+                    Console.WriteLine("想定外の文字列が入力されました。");
                 }
             } while (!(player.judge));
 
-            if (player.point <= 21)
+            if (player.point > 21)
             {
-                Game game = new Game();
-                int win = game.compare();
-
-                if (win == 0)
+                Console.WriteLine("バーストしました。");
+                if (cpu.point <= 21)
                 {
-                    Console.Write("CPUの勝ち");
+                    Console.WriteLine("あなたの負け。");
                 }
-                else if (win == 1)
+                else if(cpu.point > 21)
+                {
+                    Console.WriteLine("二人ともバーストしました。引き分け");
+                }
+                
+            }
+            else if (player.point <= 21)
+            {
+                /* Game game = new Game();
+                 int win = game.compare();
+
+                 if (win == 0)
+                 {
+                     Console.Write("CPUの勝ち");
+                 }
+                 else if (win == 1)
+                 {
+                     Console.Write("あなたの勝ち");
+                 }
+                 else if (win == 2)
+                 {
+                     Console.Write("引き分け");
+
+                 }*/
+
+                if (player.point == cpu.point && !(cpu.judge))
+                {
+                    Console.Write("引き分け");
+                }
+                else if (player.point > cpu.point)
                 {
                     Console.Write("あなたの勝ち");
                 }
-                else if (win == 2)
+                else if(player.point < cpu.point && !(cpu.judge))
                 {
-                    Console.Write("引き分け");
-
+                    Console.Write("CPUの勝ち");
                 }
-            }
-            else if (player.point > 21)
-            {
-                Console.Write("バーストしました。");
             }
 
             Console.ReadKey();
