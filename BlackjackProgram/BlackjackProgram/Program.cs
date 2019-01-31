@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,27 +7,20 @@ using System.Threading.Tasks;
 namespace BlackjackProgram
 {
     public class Program
-    { 
+    {
         static void Main(string[] args)
         {
             Console.WriteLine("ゲームを開始します。");
+            
             Console.ReadKey();
 
             CPU cpu = new CPU();
-
+            
             cpu.draw();
-            /*
-             * do
-            {
-                cpu.draw();
 
-                if (cpu.point > 21)
-                {
-                    Console.WriteLine("バーストしました。");
-                }
+            Console.ReadLine();
+            cpu.draw();
 
-            } while (cpu.point <= 17);
-            */
 
             Player player = new Player();
             do
@@ -50,30 +43,22 @@ namespace BlackjackProgram
                 }
             } while (!(player.judge));
 
-            do
-            {
-                cpu.draw();
-
-                if (cpu.point > 21)
-                {
-                    Console.WriteLine("バーストしました。");
-                }
-
-            } while (cpu.point <= 17);
-
 
             if (player.point > 21)
             {
                 Console.WriteLine("バーストしました。");
+
+                cpu.draw();
+
                 if (cpu.point <= 21)
                 {
                     Console.WriteLine("あなたの負け。");
                 }
-                else if(cpu.point > 21)
+                else if (cpu.point > 21)
                 {
                     Console.WriteLine("二人ともバーストしました。引き分け");
                 }
-                
+
             }
             else if (player.point <= 21)
             {
@@ -93,6 +78,10 @@ namespace BlackjackProgram
                      Console.Write("引き分け");
 
                  }*/
+                if (cpu.point < 17)
+                {
+                    cpu.draw();
+                }
 
                 if (player.point == cpu.point && !(cpu.judge))
                 {
@@ -102,7 +91,7 @@ namespace BlackjackProgram
                 {
                     Console.Write("あなたの勝ち");
                 }
-                else if(player.point < cpu.point && !(cpu.judge))
+                else if (player.point < cpu.point && !(cpu.judge))
                 {
                     Console.Write("CPUの勝ち");
                 }
@@ -118,10 +107,11 @@ namespace BlackjackProgram
     public class DrawCard
     {
         public string[] marks = new string[4] { "スペード", "クラブ", "ダイヤ", "ハート" };
-        public string[] numbers = new string[13] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" };
+        public string[] numbers = new string[13] { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
 
-        public List<string> drawn_mark = new List<string>();
-        public List<string> drawn_number = new List<string>();
+        public List<string> drawn_mark;
+        public List<string> drawn_number;
+
 
         public string mark { set; get; }
 
@@ -129,6 +119,8 @@ namespace BlackjackProgram
 
         public void draw()
         {
+            drawn_mark = new List<string>();
+            drawn_number = new List<string>();
 
             do
             {
@@ -138,9 +130,10 @@ namespace BlackjackProgram
                 Random r2 = new System.Random();
                 int random_number = r2.Next(12);
 
-               
+                
                 mark = marks[random_mark];
                 number = numbers[random_number];
+
 
             } while (drawn_mark.Contains(mark) && drawn_number.Contains(number));
 
@@ -168,10 +161,23 @@ namespace BlackjackProgram
             DrawCard dc = new DrawCard();
             dc.draw();
 
-            //CPU cpu = new CPU();
-            point += int.Parse(dc.number);
-
             Console.WriteLine("CPUが引いたのは{0}の{1}", dc.mark, dc.number);
+
+            if (dc.number == "A")
+            {
+                dc.number = "11";
+
+                if (point > 10)
+                {
+                    dc.number = "1";
+                }
+            }
+            else if (dc.number == "J" || dc.number == "Q" || dc.number == "K")
+            {
+                dc.number = "10";
+            }
+
+            point += int.Parse(dc.number);
 
             if (point > 21)
             {
@@ -199,10 +205,25 @@ namespace BlackjackProgram
             DrawCard dc = new DrawCard();
             dc.draw();
 
-            //Player player = new Player();
-            point += int.Parse(dc.number);
 
             Console.WriteLine("あなたが引いたのは{0}の{1}", dc.mark, dc.number);
+
+            if (dc.number == "A")
+            {
+                dc.number = "11";
+
+                if (point > 10)
+                {
+                    dc.number = "1";
+                }
+
+            }
+            else if (dc.number == "J" || dc.number == "Q" || dc.number == "K")
+            {
+                dc.number = "10";
+            }
+            
+            point += int.Parse(dc.number);
 
             if (point > 21)
             {
