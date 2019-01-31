@@ -81,13 +81,18 @@ namespace BlackjackProgram
                 if (cpu.point < 17)
                 {
                     cpu.draw();
+
+                    if (cpu.point > 21)
+                    {
+                        Console.Write("バーストしました。");
+                    }
                 }
 
                 if (player.point == cpu.point && !(cpu.judge))
                 {
                     Console.Write("引き分け");
                 }
-                else if (player.point > cpu.point)
+                else if (player.point > cpu.point || cpu.judge)
                 {
                     Console.Write("あなたの勝ち");
                 }
